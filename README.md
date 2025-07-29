@@ -1,206 +1,247 @@
-# snipit
-Summarise snps relative to a reference sequence
+# snipit-multicolor
+Enhanced version of snipit with artistic color palettes and improved visualization
+
+Summarise SNPs relative to a reference sequence with beautiful, publication-ready visualizations
 
 <img src="./docs/genome_graph.png" width="700">
 
-### Install
+## What's New in snipit-multicolor
+
+This enhanced version includes:
+- **Artistic color palettes** inspired by famous painters (Morandi, Van Gogh, Monet, Matisse)
+- **Enhanced visualization quality** with higher DPI, text shadows, and improved typography
+- **Cleaner aesthetics** with removed outer borders and subtle label backgrounds
+- **Better readability** with optimized font sizes and visual hierarchy
+
+## Installation
 
 ```
 pip install snipit
 ```
 
-### Example Usage
-Link to test data: [test.fasta](./docs/test.fasta) and [aa_test.fasta](./docs/aa_alignment.fasta)
-
-- Basic usage for nucleotide alignments:
+Or install directly from this repository:
 ```
+git clone https://github.com/hyzhou1990/snipit-multicolor.git
+cd snipit-multicolor
+pip install -e .
+```
+
+## Quick Start
+
+### Basic Usage
+```bash
+# Basic nucleotide alignment visualization
+snipit alignment.fasta --output-file output
+
+# With artistic color palette
+snipit alignment.fasta --colour-palette nature --output-file nature_plot
+
+# For amino acid sequences
+snipit protein.fasta --sequence-type aa --colour-palette nature_aa --output-file protein_plot
+```
+
+## Color Palettes
+
+### Artistic Palettes
+Each artistic palette is available in three versions:
+- **Base version** for nucleotides (A, T, G, C)
+- **Extended version** for ambiguous nucleotides
+- **Amino acid version** for protein sequences
+
+#### Nature Style
+High-saturation colors suitable for Nature publications
+```bash
+snipit alignment.fasta --colour-palette nature           # Nucleotides
+snipit alignment.fasta --colour-palette nature_extended  # With ambiguous bases
+snipit protein.fasta --sequence-type aa --colour-palette nature_aa  # Amino acids
+```
+
+#### Morandi Style
+Muted, grey-toned colors inspired by Giorgio Morandi
+```bash
+snipit alignment.fasta --colour-palette morandi
+snipit alignment.fasta --colour-palette morandi_extended
+snipit protein.fasta --sequence-type aa --colour-palette morandi_aa
+```
+
+#### Van Gogh Style
+Vibrant, expressive colors inspired by Vincent van Gogh
+```bash
+snipit alignment.fasta --colour-palette vangogh
+snipit alignment.fasta --colour-palette vangogh_extended
+snipit protein.fasta --sequence-type aa --colour-palette vangogh_aa
+```
+
+#### Monet Style
+Soft impressionist pastels inspired by Claude Monet
+```bash
+snipit alignment.fasta --colour-palette monet
+snipit alignment.fasta --colour-palette monet_extended
+snipit protein.fasta --sequence-type aa --colour-palette monet_aa
+```
+
+#### Matisse Style
+Bold, pure colors inspired by Henri Matisse
+```bash
+snipit alignment.fasta --colour-palette matisse
+snipit alignment.fasta --colour-palette matisse_extended
+snipit protein.fasta --sequence-type aa --colour-palette matisse_aa
+```
+
+### Classic Palettes
+- `classic`: Traditional SNP visualization colors
+- `classic_extended`: Classic with ambiguous base support
+- `primary`: Primary colors
+- `purine-pyrimidine`: Color by base type
+- `greyscale`: Monochrome visualization
+- `wes`: Wes Anderson inspired
+- `verity`: Pink/purple theme
+- `ugene`: UGENE software colors (for amino acids)
+
+## Advanced Features
+
+### Enhanced Visualization Options
+
+```bash
+# High-quality figure with custom size
+snipit alignment.fasta \
+  --colour-palette nature \
+  --width 15 \
+  --height 10 \
+  --output-file high_quality
+
+# Sort sequences by mutation count
+snipit alignment.fasta \
+  --colour-palette vangogh \
+  --sort-by-mutation-number \
+  --output-file sorted_plot
+```
+
+### Working with Large Alignments
+
+```bash
+# Focus on specific regions
+snipit large_alignment.fasta \
+  --colour-palette monet \
+  --include-positions 100-500 \
+  --exclude-positions 250-300 \
+  --output-file region_plot
+
+# Include indels in visualization
+snipit alignment.fasta \
+  --colour-palette matisse \
+  --show-indels \
+  --output-file indel_plot
+```
+
+### Recombination Analysis
+
+```bash
+# Visualize recombination patterns
+snipit alignment.fasta \
+  --reference REF_SEQ \
+  --recombi-mode \
+  --recombi-references "PARENT1,PARENT2" \
+  --output-file recombination_plot
+```
+
+## Output Formats
+
+Supported output formats:
+- `png` (default) - High-resolution raster image
+- `pdf` - Vector format for publications
+- `svg` - Editable vector format
+- `jpg` - Compressed raster image
+- `tiff` - High-quality raster for publications
+
+```bash
+snipit alignment.fasta --format pdf --output-file figure
+```
+
+## Examples
+
+### Example 1: Publication-Ready Figure
+```bash
 snipit test.fasta \
---output-file test
-```
-Default format output is `png`. Only specify output path/name (not extension).
-
-- To change output format, use `--format`:
-```
-snipit test.fasta \
---output-file test \
---format pdf
-```
-Options: `png`, `jpg`, `pdf`, `svg`, `tiff`.
-
-- To change color scheme, use `--colour-palette`:
-```
-snipit test.fasta \
---output-file test \
---colour-palette classic_extended
+  --colour-palette nature \
+  --width 12 \
+  --format pdf \
+  --solid-background \
+  --output-file publication_figure
 ```
 
-Other colours schemes:
-
-**Nucleotide palettes:**
-```
-classic, classic_extended, nature, nature_extended, morandi, morandi_extended, 
-vangogh, vangogh_extended, monet, monet_extended, matisse, matisse_extended,
-primary, purine-pyrimidine, greyscale, wes, verity
-```
-
-**Amino acid palettes:**
-```
-ugene, nature_aa, morandi_aa, vangogh_aa, monet_aa, matisse_aa
+### Example 2: Amino Acid Alignment
+```bash
+snipit aa_alignment.fasta \
+  --sequence-type aa \
+  --colour-palette monet_aa \
+  --sort-by-id \
+  --output-file protein_analysis
 ```
 
-**Artistic palettes inspired by famous painters:**
-- `morandi` / `morandi_extended` / `morandi_aa`: Muted, grey-toned colors inspired by Giorgio Morandi
-- `vangogh` / `vangogh_extended` / `vangogh_aa`: Vibrant, expressive colors inspired by Van Gogh
-- `monet` / `monet_extended` / `monet_aa`: Soft impressionist pastels inspired by Claude Monet
-- `matisse` / `matisse_extended` / `matisse_aa`: Bold, pure colors inspired by Henri Matisse
-
-Use `_extended` versions for colouring ambiguous bases.
-Use `_aa` versions for protein alignments.
-
-- There are multiple options to control which SNPs or indels are included/excluded: 
-```
-snipit test.fasta \
---show-indels \
---include-positions '100-150' \
---exclude-positions '223 224 225'
+### Example 3: Custom Analysis
+```bash
+snipit alignment.fasta \
+  --colour-palette vangogh_extended \
+  --reference "Reference_Seq" \
+  --labels sample_labels.csv \
+  --ambig-mode all \
+  --flip-vertical \
+  --output-file custom_analysis
 ```
 
-- For control over ambiguous bases, use `--ambig-mode` to specify how ambiguous bases are handled:
-```
-[all] include all ambig such as N,Y,B in all positions
-[snps] only include ambig if a snp is present at the same position - Default 
-[exclude] remove all ambig, same as depreciated --exclude-ambig-pos
-```
-Use the colour palette `classic_extended` when plotting with `all` or `snps`.
+## Full Usage
 
- - Recombination mode is designed to assist with recombination analysis for SC2. This mode allows for colouring of mutations present in two references. For recombination mode, three flags are required: `--reference`,`--recombi-mode`,`--recombi-references`.
-
-The specified `--reference` must be different from the `--recombi-references`.
 ```
-snipit test.fasta \
---reference USA_3 \
---recombi-mode \
---recombi-references "USA_1,USA_2"
-```
-
-For amino acid alignments, specify the sequence type as `aa`, use the colour palette `ugene`:
-```
-snipit test.prot.fasta \
---sequence-type aa \
---colour-palette ugene \
---output-file test.prot
-```
-
-There are several more options, see below for full usage.
-
-### Issues
-
-If you see an error like: 
-```
-ModuleNotFoundError: No module named 'pkg_resources'
-```
-This may mean your python install did not come with setuptools. Install [setuptools](https://packaging.python.org/en/latest/guides/installing-using-linux-tools/) and this should resolve the issue.
-
-### Full Usage
-```
-snipit
-
-optional arguments:
-  -h, --help            show this help message and exit
+snipit <alignment> [options]
 
 Input options:
   alignment             Input alignment fasta file
-  -t {nt,aa}, --sequence-type {nt,aa}
-                        Input sequence type: aa or nt
-  -r REFERENCE, --reference REFERENCE
-                        Indicates which sequence in the alignment is the
-                        reference (by sequence ID). Default: first sequence in
-                        alignment
-  -l LABELS, --labels LABELS
-                        Optional csv file of labels to show in output snipit
-                        plot. Default: sequence names
-  --l-header LABEL_HEADERS
-                        Comma separated string of column headers in label csv.
-                        First field indicates sequence name column, second the
-                        label column. Default: 'name,label'
-
-Mode options:
-  --recombi-mode        Allow colouring of query seqeunces by mutations
-                        present in two 'recombi-references' from the input
-                        alignment fasta file
-  --recombi-references RECOMBI_REFERENCES
-                        Specify two comma separated sequence IDs in the input
-                        alignment to use as 'recombi-references'. Ex.
-                        Sequence_ID_A,Sequence_ID_B
-  --cds-mode            Assumes sequence supplied is a coding sequence
+  -t {nt,aa}           Input sequence type: aa or nt (default: nt)
+  -r REFERENCE         Reference sequence ID (default: first sequence)
+  -l LABELS            CSV file with sequence labels
+  --l-header           Column headers in label CSV (default: 'name,label')
 
 Output options:
-  -d OUTPUT_DIR, --output-dir OUTPUT_DIR
-                        Output directory. Default: current working directory
-  -o OUTFILE, --output-file OUTFILE
-                        Output file name stem. Default: snp_plot
-  -s, --write-snps      Write out the SNPs in a csv file.
-  -f FORMAT, --format FORMAT
-                        Format options (png, jpg, pdf, svg, tiff) Default: png
+  -d OUTPUT_DIR        Output directory (default: current directory)
+  -o OUTPUT_FILE       Output file name stem (default: snp_plot)
+  -s, --write-snps     Write SNPs to CSV file
+  -f FORMAT            Output format: png, jpg, pdf, svg, tiff (default: png)
 
 Figure options:
-  --height HEIGHT       Overwrite the default figure height
-  --width WIDTH         Overwrite the default figure width
-  --size-option SIZE_OPTION
-                        Specify options for sizing. Options: expand, scale
-  --solid-background    Force the plot to have a solid background, rather than
-                        a transparent one.
-  -c , --colour-palette 
-                        Specify colour palette. Options: [classic,
-                        classic_extended, nature, nature_extended, morandi,
-                        morandi_extended, vangogh, vangogh_extended, monet,
-                        monet_extended, matisse, matisse_extended, primary,
-                        purine-pyrimidine, greyscale, wes, verity, ugene,
-                        nature_aa, morandi_aa, vangogh_aa, monet_aa, matisse_aa].
-                        Use _aa versions for protein
-                        alignments.
-  --flip-vertical       Flip the orientation of the plot so sequences are
-                        below the reference rather than above it.
-  --sort-by-mutation-number
-                        Render the graph with sequences sorted by the number
-                        of SNPs relative to the reference (fewest to most).
-                        Default: False
-  --sort-by-id          Sort sequences alphabetically by sequence id. Default:
-                        False
-  --sort-by-mutations SORT_BY_MUTATIONS
-                        Sort sequences by bases at specified positions.
-                        Positions are comma separated integers. Ex. '1,2,3'
-  --high-to-low         If sorted by mutation number is selected, show the
-                        sequences with the fewest SNPs closest to the
-                        reference. Default: False
+  --height HEIGHT      Figure height
+  --width WIDTH        Figure width
+  --size-option        Sizing options: expand, scale
+  --solid-background   Solid background instead of transparent
+  -c, --colour-palette Color palette selection
+  --flip-vertical      Flip plot orientation
+  --sort-by-mutation-number  Sort by SNP count
+  --sort-by-id         Sort alphabetically by ID
+  --sort-by-mutations  Sort by bases at positions (e.g., '1,2,3')
 
 SNP options:
-  --show-indels         Include insertion and deletion mutations in snipit
-                        plot.
-  --include-positions INCLUDED_POSITIONS [INCLUDED_POSITIONS ...]
-                        One or more range (closed, inclusive; one-indexed) or
-                        specific position only included in the output. Ex.
-                        '100-150' or Ex. '100 101' Considered before '--
-                        exclude-positions'.
-  --exclude-positions EXCLUDED_POSITIONS [EXCLUDED_POSITIONS ...]
-                        One or more range (closed, inclusive; one-indexed) or
-                        specific position to exclude in the output. Ex.
-                        '100-150' or Ex. '100 101' Considered after '--
-                        include-positions'.
-  --ambig-mode {all,snps,exclude}
-                        Controls how ambiguous bases are handled - [all]
-                        include all ambig such as N,Y,B in all positions;
-                        [snps] only include ambig if a snp is present at the
-                        same position; [exclude] remove all ambig, same as
-                        depreciated --exclude-ambig-pos
-
-Misc options:
-  -v, --version         show program's version number and exit
+  --show-indels        Include indels in plot
+  --include-positions  Positions to include (e.g., '100-150')
+  --exclude-positions  Positions to exclude (e.g., '223 224')
+  --ambig-mode         Handle ambiguous bases: all, snps, exclude
 ```
 
-### Cite
+## Citation
 
-Please cite this tool as follows:
+If you use snipit-multicolor in your work, please cite:
+
 ```
-Aine O'Toole, snipit (2024) GitHub repository, https://github.com/aineniamh/snipit
+Original snipit:
+Áine O'Toole, snipit (2024) GitHub repository, https://github.com/aineniamh/snipit
+
+Enhanced multicolor version:
+hyzhou1990, snipit-multicolor (2024) GitHub repository, https://github.com/hyzhou1990/snipit-multicolor
 ```
+
+## Issues and Contributions
+
+Please report issues or suggest features at: https://github.com/hyzhou1990/snipit-multicolor/issues
+
+## License
+
+This project maintains the same license as the original snipit tool.
