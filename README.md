@@ -317,7 +317,7 @@ Original snipit:
 Áine O'Toole, snipit (2024) GitHub repository, https://github.com/aineniamh/snipit
 
 Enhanced multicolor version:
-hyzhou1990, snipit-multicolor (2024) GitHub repository, https://github.com/hyzhou1990/snipit-multicolor
+hyzhou1990, snipit-multicolor (2025) GitHub repository, https://github.com/hyzhou1990/snipit-multicolor
 ```
 
 ## Issues and Contributions
