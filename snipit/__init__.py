@@ -1,5 +1,5 @@
 _program = "snipit"
-__version__ = "0.0.5"
+__version__ = "0.0.7"
 
 # Import API functions for easy access
 try:
