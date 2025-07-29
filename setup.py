@@ -4,7 +4,30 @@ import glob
 import os
 import pkg_resources
 
-from snipit import __version__, _program
+# Get version without importing the module
+import os
+import re
+
+def get_version():
+    version_file = os.path.join(os.path.dirname(__file__), 'snipit', '__init__.py')
+    with open(version_file, 'r') as f:
+        content = f.read()
+        version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]", content, re.M)
+        if version_match:
+            return version_match.group(1)
+        raise RuntimeError("Unable to find version string.")
+
+def get_program_name():
+    version_file = os.path.join(os.path.dirname(__file__), 'snipit', '__init__.py')
+    with open(version_file, 'r') as f:
+        content = f.read()
+        program_match = re.search(r"^_program = ['\"]([^'\"]*)['\"]", content, re.M)
+        if program_match:
+            return program_match.group(1)
+        raise RuntimeError("Unable to find program name.")
+
+__version__ = get_version()
+_program = get_program_name()
 
 # Read the contents of README file
 with open("README.md", "r", encoding="utf-8") as fh:

@@ -61,7 +61,7 @@ pip install -e .
 
 ## Quick Start
 
-### Basic Usage
+### Command Line Usage
 ```bash
 # Basic nucleotide alignment visualization
 snipit alignment.fasta --output-file output
@@ -72,6 +72,41 @@ snipit alignment.fasta --colour-palette nature --output-file nature_plot
 # For amino acid sequences
 snipit protein.fasta --sequence-type aa --colour-palette nature_aa --output-file protein_plot
 ```
+
+### Python API Usage
+
+snipit-mc also provides a comprehensive Python API for programmatic use:
+
+```python
+from snipit import snipit_plot, SnipitConfig
+
+# Basic usage
+result = snipit_plot("alignment.fasta", colour_palette="nature")
+
+# Advanced usage with configuration
+config = SnipitConfig(
+    colour_palette="vangogh",
+    width=12,
+    height=8,
+    format="pdf",
+    genbank="reference.gb"
+)
+result = snipit_plot("alignment.fasta", config=config)
+
+# Convenience functions
+from snipit import quick_plot, publication_plot, protein_plot
+
+# Quick plot
+quick_plot("alignment.fasta", palette="nature")
+
+# Publication-ready plot
+publication_plot("alignment.fasta", palette="nature", genbank="ref.gb")
+
+# Protein analysis
+protein_plot("protein.fasta", palette="monet_aa")
+```
+
+📖 **[Complete Python API Documentation](docs/API_DOCUMENTATION.md)**
 
 ## Color Palettes
 
