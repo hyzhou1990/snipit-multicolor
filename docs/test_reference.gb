@@ -1,0 +1,112 @@
+LOCUS       NC_000000              29903 bp    RNA     linear   VRL 01-JAN-2024
+DEFINITION  Test virus genome.
+ACCESSION   NC_000000
+VERSION     NC_000000.1
+KEYWORDS    .
+SOURCE      Test virus
+  ORGANISM  Test virus
+            Viruses.
+FEATURES             Location/Qualifiers
+     source          1..29903
+                     /organism="Test virus"
+                     /mol_type="genomic RNA"
+     gene            266..21555
+                     /gene="ORF1ab"
+                     /locus_tag="GU280_gp01"
+     CDS             266..13468
+                     /gene="ORF1ab"
+                     /locus_tag="GU280_gp01"
+                     /product="ORF1a polyprotein"
+                     /codon_start=1
+     CDS             13468..21555
+                     /gene="ORF1ab"
+                     /locus_tag="GU280_gp01"
+                     /product="ORF1b polyprotein"
+                     /codon_start=1
+     gene            21563..25384
+                     /gene="S"
+                     /locus_tag="GU280_gp02"
+     CDS             21563..25384
+                     /gene="S"
+                     /locus_tag="GU280_gp02"
+                     /product="spike glycoprotein"
+                     /codon_start=1
+     gene            25393..26220
+                     /gene="ORF3a"
+                     /locus_tag="GU280_gp03"
+     CDS             25393..26220
+                     /gene="ORF3a"
+                     /locus_tag="GU280_gp03"
+                     /product="ORF3a protein"
+                     /codon_start=1
+     gene            26245..26472
+                     /gene="E"
+                     /locus_tag="GU280_gp04"
+     CDS             26245..26472
+                     /gene="E"
+                     /locus_tag="GU280_gp04"
+                     /product="envelope protein"
+                     /codon_start=1
+     gene            26523..27191
+                     /gene="M"
+                     /locus_tag="GU280_gp05"
+     CDS             26523..27191
+                     /gene="M"
+                     /locus_tag="GU280_gp05"
+                     /product="membrane glycoprotein"
+                     /codon_start=1
+     gene            27202..27387
+                     /gene="ORF6"
+                     /locus_tag="GU280_gp06"
+     CDS             27202..27387
+                     /gene="ORF6"
+                     /locus_tag="GU280_gp06"
+                     /product="ORF6 protein"
+                     /codon_start=1
+     gene            complement(27394..27759)
+                     /gene="ORF7a"
+                     /locus_tag="GU280_gp07"
+     CDS             complement(27394..27759)
+                     /gene="ORF7a"
+                     /locus_tag="GU280_gp07"
+                     /product="ORF7a protein"
+                     /codon_start=1
+     gene            complement(27756..27887)
+                     /gene="ORF7b"
+                     /locus_tag="GU280_gp08"
+     CDS             complement(27756..27887)
+                     /gene="ORF7b"
+                     /locus_tag="GU280_gp08"
+                     /product="ORF7b protein"
+                     /codon_start=1
+     gene            27894..28259
+                     /gene="ORF8"
+                     /locus_tag="GU280_gp09"
+     CDS             27894..28259
+                     /gene="ORF8"
+                     /locus_tag="GU280_gp09"
+                     /product="ORF8 protein"
+                     /codon_start=1
+     gene            28274..29533
+                     /gene="N"
+                     /locus_tag="GU280_gp10"
+     CDS             28274..29533
+                     /gene="N"
+                     /locus_tag="GU280_gp10"
+                     /product="nucleocapsid phosphoprotein"
+                     /codon_start=1
+     gene            29558..29674
+                     /gene="ORF10"
+                     /locus_tag="GU280_gp11"
+     CDS             29558..29674
+                     /gene="ORF10"
+                     /locus_tag="GU280_gp11"
+                     /product="ORF10 protein"
+                     /codon_start=1
+ORIGIN
+        1 attaaaggtt tataccttcc caggtaacaa accaaccaac tttcgatctc ttgtagatct
+       61 gttctctaaa cgaactttaa aatctgtgtg gctgtcactc ggctgcatgc ttagtgcact
+      121 cacgcagtat aattaataac taattactgt cgttgacagg acacgagtaa ctcgtctatc
+      181 ttctgcaggc tgcttacggt ttcgtccgtg ttgcagccga tcatcagcac atctaggttt
+      241 cgtccgggtg tgaccgaaag gtaagatgga gagccttgtc cctggtttca acgagaaaac
+//

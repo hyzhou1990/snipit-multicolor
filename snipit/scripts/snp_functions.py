@@ -382,12 +382,173 @@ sfunks.make_graph(num_seqs,num_snps,record_ambs,record_snps,
                       args.recombi_references)
 """
 
+def draw_gene_track(ax, features, y_position, y_height, genome_length, colour_palette="classic", sequence_type="nt"):
+    """
+    Draw a gene track with arrows for genes.
+    
+    Args:
+        ax: matplotlib axis
+        features: list of gene features from GenBank
+        y_position: y coordinate for gene track
+        y_height: height of gene track
+        genome_length: total length of the genome
+        colour_palette: color palette name to match gene colors
+        sequence_type: 'nt' for nucleotide or 'aa' for amino acid
+    """
+    # Define gene color palettes to match different artistic styles
+    # Each palette contains a list of colors that will be assigned to genes in order
+    gene_color_schemes = {
+        # Classic palette - traditional scientific colors
+        "classic": [
+            "#2563EB", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6", 
+            "#EC4899", "#14B8A6", "#F97316", "#6366F1", "#84CC16",
+            "#06B6D4", "#A855F7", "#EAB308", "#3B82F6", "#22C55E"
+        ],
+        # Nature-style palette - high saturation
+        "nature": [
+            "#1E40AF", "#059669", "#DC2626", "#7C3AED", "#EA580C", 
+            "#0891B2", "#BE123C", "#166534", "#9333EA", "#CA8A04",
+            "#0E7490", "#7E22CE", "#B91C1C", "#15803D", "#C2410C"
+        ],
+        # Morandi palette - muted tones
+        "morandi": [
+            "#8B7E74", "#7F9173", "#A78F9B", "#9CA3AF", "#B3907A",
+            "#94A3B8", "#BFA094", "#A3A78F", "#8F94A3", "#B89B94",
+            "#91A3A7", "#A7948F", "#9B8FA3", "#8FA3B8", "#A79B8F"
+        ],
+        # Van Gogh palette - vibrant contrasts
+        "vangogh": [
+            "#1E3A8A", "#CA8A04", "#166534", "#7C2D12", "#DC2626",
+            "#3730A3", "#0F766E", "#B45309", "#4C1D95", "#991B1B",
+            "#1E40AF", "#A16207", "#14532D", "#6B21A8", "#C2410C"
+        ],
+        # Monet palette - soft impressionist pastels
+        "monet": [
+            "#93C5FD", "#BBF7D0", "#FECACA", "#E9D5FF", "#FED7AA",
+            "#C7D2FE", "#FDE68A", "#BFDBFE", "#D9F99D", "#FBCFE8",
+            "#A5F3FC", "#DDD6FE", "#FDE047", "#DBEAFE", "#FCA5A5"
+        ],
+        # Matisse palette - bold pure colors
+        "matisse": [
+            "#1D4ED8", "#10B981", "#EF4444", "#F59E0B", "#7C3AED",
+            "#EC4899", "#0EA5E9", "#16A34A", "#DC2626", "#EAB308",
+            "#9333EA", "#DB2777", "#0284C7", "#22C55E", "#F97316"
+        ]
+    }
+    
+    # Get the appropriate color palette
+    base_palette = colour_palette.replace("_extended", "").replace("_aa", "")
+    if base_palette not in gene_color_schemes:
+        base_palette = "classic"
+    
+    color_list = gene_color_schemes[base_palette]
+    
+    # Draw background track
+    track_bg = patches.Rectangle((0, y_position), genome_length, y_height * 2,
+                                alpha=0.1, fill=True, edgecolor='none', 
+                                facecolor="#E5E7EB", antialiased=True)
+    ax.add_patch(track_bg)
+    
+    # Create a mapping of unique gene names to colors
+    unique_genes = []
+    gene_color_map = {}
+    
+    # First pass: collect unique gene names
+    for feature in features:
+        gene_name = feature["name"]
+        if gene_name not in unique_genes:
+            unique_genes.append(gene_name)
+    
+    # Assign colors to each unique gene
+    for i, gene_name in enumerate(unique_genes):
+        # Cycle through colors if we have more genes than colors
+        color_index = i % len(color_list)
+        gene_color_map[gene_name] = color_list[color_index]
+    
+    # Draw genes
+    for feature in features:
+        start = feature["start"]
+        end = feature["end"]
+        strand = feature["strand"]
+        feat_type = feature["type"]
+        name = feature["name"]
+        
+        # Get color for this specific gene
+        color = gene_color_map.get(name, "#6B7280")
+        
+        # Calculate feature dimensions
+        feat_length = end - start
+        feat_y = y_position + y_height * 0.2
+        feat_height = y_height * 1.6
+        
+        if strand == 1:  # Forward strand
+            # Draw arrow pointing right
+            arrow_size = min(feat_length * 0.1, genome_length * 0.01)
+            
+            # Main rectangle (body of gene)
+            rect_width = feat_length - arrow_size
+            rect = patches.Rectangle((start, feat_y), rect_width, feat_height,
+                                   alpha=0.8, fill=True, edgecolor='white',
+                                   linewidth=1, facecolor=color, antialiased=True)
+            ax.add_patch(rect)
+            
+            # Arrow head
+            arrow_points = [
+                (start + rect_width, feat_y),
+                (end, feat_y + feat_height/2),
+                (start + rect_width, feat_y + feat_height)
+            ]
+            arrow = patches.Polygon(arrow_points, alpha=0.8, fill=True, 
+                                  edgecolor='white', linewidth=1,
+                                  facecolor=color, antialiased=True)
+            ax.add_patch(arrow)
+            
+        else:  # Reverse strand (-1)
+            # Draw arrow pointing left
+            arrow_size = min(feat_length * 0.1, genome_length * 0.01)
+            
+            # Main rectangle (body of gene)
+            rect_width = feat_length - arrow_size
+            rect = patches.Rectangle((start + arrow_size, feat_y), rect_width, feat_height,
+                                   alpha=0.8, fill=True, edgecolor='white',
+                                   linewidth=1, facecolor=color, antialiased=True)
+            ax.add_patch(rect)
+            
+            # Arrow head
+            arrow_points = [
+                (start + arrow_size, feat_y),
+                (start, feat_y + feat_height/2),
+                (start + arrow_size, feat_y + feat_height)
+            ]
+            arrow = patches.Polygon(arrow_points, alpha=0.8, fill=True,
+                                  edgecolor='white', linewidth=1,
+                                  facecolor=color, antialiased=True)
+            ax.add_patch(arrow)
+        
+        # Add gene name if space permits
+        if feat_length > genome_length * 0.02:  # Only show name if gene is large enough
+            text_x = start + feat_length/2
+            text_y = feat_y + feat_height/2
+            
+            # Add white background for text
+            bbox_props = dict(boxstyle="round,pad=0.2", facecolor='white', 
+                            edgecolor='none', alpha=0.8)
+            
+            ax.text(text_x, text_y, name, size=8, ha="center", va="center",
+                   fontweight='medium', bbox=bbox_props)
+    
+    # Add gene track label
+    label = "Gene" if sequence_type == "nt" else "Protein"
+    ax.text(-0.01*genome_length, y_position + y_height, label, 
+           size=10, ha="right", va="center", fontweight='medium', style='italic')
+
 def make_graph(num_seqs, num_snps, amb_dict, snp_records,
                 output, label_map, colour_dict, length,
                 width, height, size_option, solid_background,
                 remove_site_text,ambig_mode,flip_vertical=False,included_positions=None,excluded_positions=None,
                sort_by_mutation_number=False, high_to_low=True, sort_by_id=False,
-               sort_by_mutations=False, recombi_mode=False, recombi_references=[]
+               sort_by_mutations=False, recombi_mode=False, recombi_references=[],
+               gene_features=None, colour_palette="classic", sequence_type="nt"
                ):
     y_level = 0
     ref_vars = {}
@@ -667,6 +828,10 @@ def make_graph(num_seqs, num_snps, amb_dict, snp_records,
     for var in ref_vars:
         ax.plot([var,var],[ref_genome_position+y_inc*0.02,ref_genome_position+(y_inc*0.98)], color="#DC2626", linewidth=2, alpha=0.7, antialiased=True, solid_capstyle='round')
 
+    # Draw gene track if features are provided
+    if gene_features:
+        gene_track_position = ref_genome_position - y_inc * 2
+        draw_gene_track(ax, gene_features, gene_track_position, y_inc, length, colour_palette, sequence_type)
 
     # Remove all plot borders/spines
     ax.spines['top'].set_visible(False)
@@ -678,10 +843,16 @@ def make_graph(num_seqs, num_snps, amb_dict, snp_records,
 
     # Add extra space on the left for labels
     ax.set_xlim(-0.05*length,length)
+    
+    # Adjust y-axis limits to accommodate gene track if present
+    bottom_limit = ref_genome_position
+    if gene_features:
+        bottom_limit = ref_genome_position - y_inc * 3  # Extra space for gene track
+    
     if not flip_vertical:
-        ax.set_ylim(ref_genome_position,y_level+(y_inc*1.05))
+        ax.set_ylim(bottom_limit,y_level+(y_inc*1.05))
     else:
-        ax.set_ylim(ref_genome_position,y_level+(y_inc*2.05))
+        ax.set_ylim(bottom_limit,y_level+(y_inc*2.05))
         ax.invert_yaxis() # must be called after axis limits are set
 
     ax.tick_params(axis='x', labelsize=9)
@@ -821,3 +992,66 @@ def green(text):
 
 def yellow(text):
     return YELLOW + text + END_FORMATTING
+
+def parse_genbank(genbank_file, cwd):
+    """
+    Parse a GenBank file and extract gene features for visualization.
+    
+    Args:
+        genbank_file: Path to GenBank file
+        cwd: Current working directory
+    
+    Returns:
+        List of gene features with positions, names, and types
+    """
+    import os
+    from Bio import SeqIO
+    
+    gb_path = os.path.join(cwd, genbank_file)
+    
+    if not os.path.exists(gb_path):
+        sys.stderr.write(red(f"Error: GenBank file {genbank_file} not found\n"))
+        return None
+    
+    features = []
+    
+    try:
+        # Parse GenBank file
+        for record in SeqIO.parse(gb_path, "genbank"):
+            for feature in record.features:
+                if feature.type in ["gene", "CDS", "rRNA", "tRNA", "ncRNA", "regulatory"]:
+                    # Extract feature information
+                    start = int(feature.location.start)
+                    end = int(feature.location.end)
+                    strand = feature.location.strand  # 1 for forward, -1 for reverse
+                    
+                    # Get feature name
+                    name = None
+                    if "gene" in feature.qualifiers:
+                        name = feature.qualifiers["gene"][0]
+                    elif "locus_tag" in feature.qualifiers:
+                        name = feature.qualifiers["locus_tag"][0]
+                    elif "product" in feature.qualifiers:
+                        name = feature.qualifiers["product"][0][:20]  # Truncate long product names
+                    else:
+                        name = feature.type
+                    
+                    features.append({
+                        "start": start,
+                        "end": end,
+                        "strand": strand,
+                        "type": feature.type,
+                        "name": name
+                    })
+            
+            # Only process the first record (reference sequence)
+            break
+                
+    except Exception as e:
+        sys.stderr.write(red(f"Error parsing GenBank file: {str(e)}\n"))
+        return None
+    
+    # Sort features by start position
+    features.sort(key=lambda x: x["start"])
+    
+    return features

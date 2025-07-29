@@ -1,0 +1,118 @@
+LOCUS       NC_000000              29903 bp    RNA     linear   VRL 01-JAN-2024
+DEFINITION  Test virus genome with diverse gene types.
+ACCESSION   NC_000000
+VERSION     NC_000000.1
+KEYWORDS    .
+SOURCE      Test virus
+  ORGANISM  Test virus
+            Viruses.
+FEATURES             Location/Qualifiers
+     source          1..29903
+                     /organism="Test virus"
+                     /mol_type="genomic RNA"
+     gene            266..5555
+                     /gene="POL"
+                     /locus_tag="GU280_gp01"
+     CDS             266..5555
+                     /gene="POL"
+                     /locus_tag="GU280_gp01"
+                     /product="polymerase"
+                     /codon_start=1
+     gene            5600..8500
+                     /gene="ENV"
+                     /locus_tag="GU280_gp02"
+     CDS             5600..8500
+                     /gene="ENV"
+                     /locus_tag="GU280_gp02"
+                     /product="envelope protein"
+                     /codon_start=1
+     rRNA            8600..9200
+                     /product="16S ribosomal RNA"
+     tRNA            9300..9380
+                     /product="tRNA-Leu"
+     gene            10000..12000
+                     /gene="REP"
+                     /locus_tag="GU280_gp03"
+     CDS             10000..12000
+                     /gene="REP"
+                     /locus_tag="GU280_gp03"
+                     /product="replicase"
+                     /codon_start=1
+     regulatory      12100..12200
+                     /regulatory_class="promoter"
+                     /note="core promoter"
+     ncRNA           12500..13000
+                     /ncRNA_class="lncRNA"
+                     /product="long non-coding RNA"
+     gene            14000..15500
+                     /gene="CAP"
+                     /locus_tag="GU280_gp04"
+     CDS             14000..15500
+                     /gene="CAP"
+                     /locus_tag="GU280_gp04"
+                     /product="capsid protein"
+                     /codon_start=1
+     tRNA            15600..15680
+                     /product="tRNA-Met"
+     rRNA            16000..17500
+                     /product="23S ribosomal RNA"
+     gene            18000..20000
+                     /gene="HEL"
+                     /locus_tag="GU280_gp05"
+     CDS             18000..20000
+                     /gene="HEL"
+                     /locus_tag="GU280_gp05"
+                     /product="helicase"
+                     /codon_start=1
+     regulatory      20100..20150
+                     /regulatory_class="terminator"
+                     /note="transcription terminator"
+     gene            21000..22500
+                     /gene="PRO"
+                     /locus_tag="GU280_gp06"
+     CDS             21000..22500
+                     /gene="PRO"
+                     /locus_tag="GU280_gp06"
+                     /product="protease"
+                     /codon_start=1
+     ncRNA           22600..22800
+                     /ncRNA_class="miRNA"
+                     /product="microRNA"
+     gene            23000..25000
+                     /gene="NS1"
+                     /locus_tag="GU280_gp07"
+     CDS             23000..25000
+                     /gene="NS1"
+                     /locus_tag="GU280_gp07"
+                     /product="non-structural protein 1"
+                     /codon_start=1
+     tRNA            25100..25180
+                     /product="tRNA-Arg"
+     gene            25500..27000
+                     /gene="NS2"
+                     /locus_tag="GU280_gp08"
+     CDS             25500..27000
+                     /gene="NS2"
+                     /locus_tag="GU280_gp08"
+                     /product="non-structural protein 2"
+                     /codon_start=1
+     regulatory      27100..27200
+                     /regulatory_class="enhancer"
+                     /note="transcriptional enhancer"
+     rRNA            27500..28000
+                     /product="5S ribosomal RNA"
+     gene            28200..29500
+                     /gene="TAIL"
+                     /locus_tag="GU280_gp09"
+     CDS             28200..29500
+                     /gene="TAIL"
+                     /locus_tag="GU280_gp09"
+                     /product="tail protein"
+                     /codon_start=1
+ORIGIN
+        1 attaaaggtt tataccttcc caggtaacaa accaaccaac tttcgatctc ttgtagatct
+       61 gttctctaaa cgaactttaa aatctgtgtg gctgtcactc ggctgcatgc ttagtgcact
+      121 cacgcagtat aattaataac taattactgt cgttgacagg acacgagtaa ctcgtctatc
+      181 ttctgcaggc tgcttacggt ttcgtccgtg ttgcagccga tcatcagcac atctaggttt
+      241 cgtccgggtg tgaccgaaag gtaagatgga gagccttgtc cctggtttca acgagaaaac
+//

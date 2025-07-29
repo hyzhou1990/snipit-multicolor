@@ -32,6 +32,7 @@ def main(sysargs = sys.argv[1:]):
     i_group.add_argument("-r","--reference", action="store",help="Indicates which sequence in the alignment is\nthe reference (by sequence ID).\nDefault: first sequence in alignment", dest="reference")
     i_group.add_argument("-l","--labels", action="store",help="Optional csv file of labels to show in output snipit plot. Default: sequence names", dest="labels")
     i_group.add_argument("--l-header", action="store",help="Comma separated string of column headers in label csv. First field indicates sequence name column, second the label column. Default: 'name,label'", dest="label_headers",default="name,label")
+    i_group.add_argument("-g","--genbank", action="store",help="Optional GenBank file for reference sequence to display gene annotations", dest="genbank")
 
     m_group = parser.add_argument_group('Mode options')
     m_group.add_argument("--recombi-mode",action='store_true',dest="recombi_mode",help="Allow colouring of query seqeunces by mutations present in two 'recombi-references' from the input alignment fasta file")
@@ -120,6 +121,11 @@ def main(sysargs = sys.argv[1:]):
     sfunks.check_size_option(args.size_option)
 
     sfunks.write_out_snps(args.write_snps,record_snps,output_dir)
+    
+    # Parse GenBank file if provided
+    gene_features = None
+    if args.genbank:
+        gene_features = sfunks.parse_genbank(args.genbank, cwd)
 
     sfunks.make_graph(num_seqs,
                         num_snps,
@@ -143,7 +149,10 @@ def main(sysargs = sys.argv[1:]):
                       args.sort_by_id,
                       args.sort_by_mutations,
                       args.recombi_mode,
-                      args.recombi_references)
+                      args.recombi_references,
+                      gene_features,
+                      args.colour_palette,
+                      args.sequence_type)
     print(sfunks.green(f"Snipping Complete: {output}"))
 
 if __name__ == '__main__':

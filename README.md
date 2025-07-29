@@ -28,6 +28,7 @@ This enhanced version includes:
 - **Enhanced visualization quality** with higher DPI, text shadows, and improved typography
 - **Cleaner aesthetics** with removed outer borders and subtle label backgrounds
 - **Better readability** with optimized font sizes and visual hierarchy
+- **GenBank gene annotations** support for displaying beautiful gene tracks with directional arrows
 
 ## Installation
 
@@ -161,6 +162,36 @@ snipit alignment.fasta \
   --output-file recombination_plot
 ```
 
+### Gene Annotations with GenBank
+
+Display beautiful gene tracks with directional arrows using GenBank files:
+
+```bash
+# Add gene annotations from GenBank file
+snipit alignment.fasta \
+  --genbank reference.gb \
+  --colour-palette nature \
+  --output-file annotated_plot
+
+# Combine with other features
+snipit alignment.fasta \
+  --genbank viral_genome.gb \
+  --colour-palette vangogh \
+  --sort-by-mutation-number \
+  --width 15 \
+  --output-file comprehensive_analysis
+```
+
+Gene features are automatically colored by type:
+- **CDS**: Blue arrows
+- **Gene**: Light blue arrows
+- **rRNA**: Green arrows
+- **tRNA**: Purple arrows
+- **ncRNA**: Orange arrows
+- **Regulatory**: Red arrows
+
+Arrows indicate gene direction (forward/reverse strand) and gene names are displayed when space permits.
+
 ## Output Formats
 
 Supported output formats:
@@ -217,6 +248,7 @@ Input options:
   -r REFERENCE         Reference sequence ID (default: first sequence)
   -l LABELS            CSV file with sequence labels
   --l-header           Column headers in label CSV (default: 'name,label')
+  -g, --genbank        GenBank file for gene annotations
 
 Output options:
   -d OUTPUT_DIR        Output directory (default: current directory)
