@@ -1037,16 +1037,45 @@ def green(text):
 def yellow(text):
     return YELLOW + text + END_FORMATTING
 
-def parse_genbank(genbank_file, cwd):
+def validate_genbank_compatibility(genbank_file, sequence_type, sequence_length=None):
+    """
+    Validate compatibility between GenBank annotations and sequence type.
+    
+    Args:
+        genbank_file: Path to GenBank file
+        sequence_type: Type of sequence ("nt" or "aa")
+        sequence_length: Length of the input sequence for validation
+    
+    Returns:
+        dict: Validation results with warnings and recommendations
+    """
+    validation = {
+        "compatible": True,
+        "warnings": [],
+        "recommendations": []
+    }
+    
+    if sequence_type == "aa":
+        validation["warnings"].append(
+            "Amino acid sequences require CDS annotations in GenBank file"
+        )
+        validation["recommendations"].append(
+            "Ensure your GenBank file contains CDS (protein-coding) features"
+        )
+    
+    return validation
+
+def parse_genbank(genbank_file, cwd, sequence_type="nt"):
     """
     Parse a GenBank file and extract gene features for visualization.
     
     Args:
         genbank_file: Path to GenBank file
         cwd: Current working directory
+        sequence_type: Type of sequence ("nt" for nucleotide, "aa" for amino acid)
     
     Returns:
-        List of gene features with positions, names, and types
+        List of gene features with positions, names, and types, or None if incompatible
     """
     import os
     from Bio import SeqIO
@@ -1058,6 +1087,8 @@ def parse_genbank(genbank_file, cwd):
         return None
     
     features = []
+    protein_features = []
+    nucleotide_features = []
     
     try:
         # Parse GenBank file
@@ -1080,13 +1111,21 @@ def parse_genbank(genbank_file, cwd):
                     else:
                         name = feature.type
                     
-                    features.append({
+                    feature_info = {
                         "start": start,
                         "end": end,
                         "strand": strand,
                         "type": feature.type,
                         "name": name
-                    })
+                    }
+                    
+                    # Categorize features by type
+                    if feature.type == "CDS":
+                        protein_features.append(feature_info)
+                    else:
+                        nucleotide_features.append(feature_info)
+                    
+                    features.append(feature_info)
             
             # Only process the first record (reference sequence)
             break
@@ -1095,7 +1134,61 @@ def parse_genbank(genbank_file, cwd):
         sys.stderr.write(red(f"Error parsing GenBank file: {str(e)}\n"))
         return None
     
+    # Check compatibility between sequence type and available annotations
+    if sequence_type == "aa":
+        if not protein_features:
+            sys.stderr.write(yellow(f"Warning: GenBank file contains no protein (CDS) annotations.\n"))
+            sys.stderr.write(yellow(f"For amino acid sequences, GenBank file should contain CDS features.\n"))
+            sys.stderr.write(yellow(f"Skipping GenBank annotations for this visualization.\n"))
+            return None
+        else:
+            # For protein sequences, only use CDS features
+            features = protein_features
+            sys.stderr.write(green(f"Using {len(protein_features)} protein features from GenBank file.\n"))
+    else:  # nucleotide sequence
+        if not features:
+            sys.stderr.write(yellow(f"Warning: GenBank file contains no suitable annotations.\n"))
+            return None
+        else:
+            sys.stderr.write(green(f"Using {len(features)} genomic features from GenBank file.\n"))
+    
     # Sort features by start position
     features.sort(key=lambda x: x["start"])
     
     return features
+
+
+def handle_genbank_sequence_mismatch(sequence_type, has_protein_features, has_nucleotide_features):
+    """
+    Handle mismatches between sequence type and GenBank annotations.
+    
+    Args:
+        sequence_type: Type of input sequence ("nt" or "aa")
+        has_protein_features: Boolean, whether GenBank has CDS features
+        has_nucleotide_features: Boolean, whether GenBank has genomic features
+    
+    Returns:
+        tuple: (should_continue, error_message)
+    """
+    if sequence_type == "aa" and not has_protein_features:
+        error_msg = (
+            "GenBank file incompatibility detected:\\n"
+            "  - Input sequences: Amino acid (protein)\\n"
+            "  - GenBank annotations: Nucleotide only (no CDS features)\\n\\n"
+            "Solutions:\\n"
+            "  1. Use a GenBank file with CDS (protein-coding) annotations\\n"
+            "  2. Convert your protein sequences to nucleotide sequences\\n"
+            "  3. Run without --genbank option for protein visualization\\n"
+        )
+        return False, error_msg
+    
+    elif sequence_type == "nt" and not has_nucleotide_features and has_protein_features:
+        warning_msg = (
+            "Note: GenBank file contains only protein annotations, "
+            "but input is nucleotide sequence. This may cause position mismatches."
+        )
+        sys.stderr.write(yellow(warning_msg + "\\n"))
+        return True, None
+    
+    return True, None
+

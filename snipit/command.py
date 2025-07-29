@@ -125,7 +125,7 @@ def main(sysargs = sys.argv[1:]):
     # Parse GenBank file if provided
     gene_features = None
     if args.genbank:
-        gene_features = sfunks.parse_genbank(args.genbank, cwd)
+        gene_features = sfunks.parse_genbank(args.genbank, cwd, args.sequence_type)
 
     sfunks.make_graph(num_seqs,
                         num_snps,

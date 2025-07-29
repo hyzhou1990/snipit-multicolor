@@ -63,7 +63,7 @@ def generate_updated_examples():
         
         # Generate GenBank annotated version if genbank file exists
         if os.path.exists("docs/test_reference.gb"):
-            gene_features = sfunks.parse_genbank("docs/test_reference.gb", os.getcwd())
+            gene_features = sfunks.parse_genbank("docs/test_reference.gb", os.getcwd(), sequence_type)
             output_file = "docs/examples/sars_cov2_nature.png"
             sfunks.make_graph(
                 num_seqs, num_snps, record_ambs, record_snps, output_file,
