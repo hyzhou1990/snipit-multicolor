@@ -1,4 +1,14 @@
 # snipit-multicolor
+
+[![PyPI version](https://badge.fury.io/py/snipit-mc.svg)](https://badge.fury.io/py/snipit-mc)
+[![PyPI downloads](https://img.shields.io/pypi/dm/snipit-mc.svg)](https://pypi.org/project/snipit-mc/)
+[![PyPI downloads total](https://static.pepy.tech/badge/snipit-mc)](https://pepy.tech/project/snipit-mc)
+[![PyPI downloads monthly](https://static.pepy.tech/badge/snipit-mc/month)](https://pepy.tech/project/snipit-mc)
+[![PyPI downloads weekly](https://static.pepy.tech/badge/snipit-mc/week)](https://pepy.tech/project/snipit-mc)
+[![Python versions](https://img.shields.io/pypi/pyversions/snipit-mc.svg)](https://pypi.org/project/snipit-mc/)
+[![License](https://img.shields.io/github/license/hyzhou1990/snipit-multicolor.svg)](https://github.com/hyzhou1990/snipit-multicolor/blob/master/LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/hyzhou1990/snipit-multicolor.svg)](https://github.com/hyzhou1990/snipit-multicolor/stargazers)
+
 Enhanced version of snipit with artistic color palettes and improved visualization
 
 Summarise SNPs relative to a reference sequence with beautiful, publication-ready visualizations
@@ -343,6 +353,26 @@ SNP options:
   --exclude-positions  Positions to exclude (e.g., '223 224')
   --ambig-mode         Handle ambiguous bases: all, snps, exclude
 ```
+
+## Download Statistics
+
+Track snipit-mc package downloads and usage statistics:
+
+### PyPI Download Statistics
+- **Total Downloads**: [![Total Downloads](https://static.pepy.tech/badge/snipit-mc)](https://pepy.tech/project/snipit-mc)
+- **Monthly Downloads**: [![Monthly Downloads](https://static.pepy.tech/badge/snipit-mc/month)](https://pepy.tech/project/snipit-mc)  
+- **Weekly Downloads**: [![Weekly Downloads](https://static.pepy.tech/badge/snipit-mc/week)](https://pepy.tech/project/snipit-mc)
+
+### Detailed Analytics
+Visit [pepy.tech/project/snipit-mc](https://pepy.tech/project/snipit-mc) for:
+- Historical download trends
+- Version-specific statistics  
+- Geographic distribution
+- Download patterns over time
+
+### Alternative Statistics
+- **PyPI Stats**: [PyPI Package Page](https://pypi.org/project/snipit-mc/)
+- **GitHub Analytics**: [Repository Insights](https://github.com/hyzhou1990/snipit-multicolor/pulse)
 
 ## Citation
 
