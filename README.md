@@ -47,11 +47,12 @@ This enhanced version includes:
 
 ## Installation
 
-```
+### From PyPI (Recommended)
+```bash
 pip install snipit-mc
 ```
 
-Or install directly from this repository:
+### From Source
 ```
 git clone https://github.com/hyzhou1990/snipit-multicolor.git
 cd snipit-multicolor
