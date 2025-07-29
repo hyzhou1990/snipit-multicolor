@@ -35,11 +35,27 @@ snipit test.fasta \
 ```
 
 Other colours schemes:
+
+**Nucleotide palettes:**
 ```
-classic, classic_extended, primary, purine-pyrimidine, greyscale, wes,verity, ugene
+classic, classic_extended, nature, nature_extended, morandi, morandi_extended, 
+vangogh, vangogh_extended, monet, monet_extended, matisse, matisse_extended,
+primary, purine-pyrimidine, greyscale, wes, verity
 ```
-Use `ugene` for protein (aa) alignments.
-Use `classic_extended` for colouring ambiguous bases.
+
+**Amino acid palettes:**
+```
+ugene, nature_aa, morandi_aa, vangogh_aa, monet_aa, matisse_aa
+```
+
+**Artistic palettes inspired by famous painters:**
+- `morandi` / `morandi_extended` / `morandi_aa`: Muted, grey-toned colors inspired by Giorgio Morandi
+- `vangogh` / `vangogh_extended` / `vangogh_aa`: Vibrant, expressive colors inspired by Van Gogh
+- `monet` / `monet_extended` / `monet_aa`: Soft impressionist pastels inspired by Claude Monet
+- `matisse` / `matisse_extended` / `matisse_aa`: Bold, pure colors inspired by Henri Matisse
+
+Use `_extended` versions for colouring ambiguous bases.
+Use `_aa` versions for protein alignments.
 
 - There are multiple options to control which SNPs or indels are included/excluded: 
 ```
@@ -136,8 +152,12 @@ Figure options:
                         a transparent one.
   -c , --colour-palette 
                         Specify colour palette. Options: [classic,
-                        classic_extended, primary, purine-pyrimidine,
-                        greyscale, wes, verity, ugene]. Use ugene for protein
+                        classic_extended, nature, nature_extended, morandi,
+                        morandi_extended, vangogh, vangogh_extended, monet,
+                        monet_extended, matisse, matisse_extended, primary,
+                        purine-pyrimidine, greyscale, wes, verity, ugene,
+                        nature_aa, morandi_aa, vangogh_aa, monet_aa, matisse_aa].
+                        Use _aa versions for protein
                         alignments.
   --flip-vertical       Flip the orientation of the plot so sequences are
                         below the reference rather than above it.

@@ -540,8 +540,18 @@ def make_graph(num_seqs, num_snps, amb_dict, snp_records,
         plt.rcParams['xtick.bottom'] = plt.rcParams['xtick.labelbottom'] = False
         plt.rcParams['xtick.top'] = plt.rcParams['xtick.labeltop'] = True
 
-    # width and height of the figure
-    fig, ax = plt.subplots(1,1, figsize=(width,height), dpi=250)
+    # Set matplotlib parameters for better quality
+    plt.rcParams['font.family'] = 'sans-serif'
+    plt.rcParams['font.sans-serif'] = ['DejaVu Sans', 'Helvetica', 'Arial', 'sans-serif']
+    plt.rcParams['font.size'] = 11
+    plt.rcParams['axes.linewidth'] = 1.5
+    plt.rcParams['xtick.major.width'] = 1.5
+    plt.rcParams['ytick.major.width'] = 1.5
+    plt.rcParams['xtick.major.size'] = 4
+    plt.rcParams['ytick.major.size'] = 4
+    
+    # width and height of the figure with higher DPI for better quality
+    fig, ax = plt.subplots(1,1, figsize=(width,height), dpi=300, facecolor='white')
 
     y_level = 0
 
@@ -558,11 +568,13 @@ def make_graph(num_seqs, num_snps, amb_dict, snp_records,
         col = next_colour()
 
         # for each record (sequence) draw a rectangle the length of the whole genome (either grey or white)
-        rect = patches.Rectangle((0,y_level-(0.5*y_inc)), length, y_inc ,alpha=0.3, fill=True, edgecolor='none',facecolor=col)
+        rect = patches.Rectangle((0,y_level-(0.5*y_inc)), length, y_inc ,alpha=0.25, fill=True, edgecolor='none',facecolor=col, antialiased=True)
         ax.add_patch(rect)
 
-        # for each record add the name to the left hand side
-        ax.text(0, y_level, label_map[record], size=9, ha="right", va="center")
+        # for each record add the name to the left hand side with background
+        # Add subtle background box for label
+        bbox_props = dict(boxstyle="round,pad=0.3", facecolor='#F3F4F6', edgecolor='none', alpha=0.7)
+        ax.text(-0.01*length, y_level, label_map[record], size=11, ha="right", va="center", fontweight='medium', bbox=bbox_props)
 
     position = 0
     for snp in sorted(snp_dict):
@@ -571,7 +583,9 @@ def make_graph(num_seqs, num_snps, amb_dict, snp_records,
         # write text adjacent to the SNPs shown with the numeric position
         # the text alignment is toggled right/left (top/bottom considering 90-deg rotation) if the plot is flipped
         if not remove_site_text:
-            ax.text(position, y_level+(0.55*y_inc), snp, size=9, ha="center", va="bottom" if not flip_vertical else "top", rotation=90)
+            # Add background for position number
+            bbox_props = dict(boxstyle="round,pad=0.2", facecolor='white', edgecolor='#E5E7EB', linewidth=0.5, alpha=0.9)
+            ax.text(position, y_level+(0.55*y_inc), snp, size=9, ha="center", va="bottom" if not flip_vertical else "top", rotation=90, fontweight='medium', color='#374151', bbox=bbox_props)
 
         # snp position labels
         left_of_box = position-(0.4*spacing)
@@ -586,33 +600,38 @@ def make_graph(num_seqs, num_snps, amb_dict, snp_records,
             bottom_of_box = (y_pos*y_inc)-(0.5*y_inc)
             # draw box for snp
             if recombi_out:
-                rect = patches.Rectangle((left_of_box,bottom_of_box),spacing*0.8,  y_inc,alpha=0.5, fill=True, edgecolor='none',facecolor=colour_dict[recombi_out])
+                rect = patches.Rectangle((left_of_box,bottom_of_box),spacing*0.85,  y_inc*0.9,alpha=0.8, fill=True, edgecolor='white',linewidth=0.5,facecolor=colour_dict[recombi_out], antialiased=True)
             elif var in colour_dict:
-                rect = patches.Rectangle((left_of_box,bottom_of_box),spacing*0.8,  y_inc,alpha=0.5, fill=True, edgecolor='none',facecolor=colour_dict[var.upper()])
+                rect = patches.Rectangle((left_of_box,bottom_of_box),spacing*0.85,  y_inc*0.9,alpha=0.8, fill=True, edgecolor='white',linewidth=0.5,facecolor=colour_dict[var.upper()], antialiased=True)
             else:
-                rect = patches.Rectangle((left_of_box,bottom_of_box), spacing*0.8,  y_inc,alpha=0.5, fill=True, edgecolor='none',facecolor="dimgrey")
+                rect = patches.Rectangle((left_of_box,bottom_of_box), spacing*0.85,  y_inc*0.9,alpha=0.8, fill=True, edgecolor='white',linewidth=0.5,facecolor="dimgrey", antialiased=True)
 
             ax.add_patch(rect)
 
-            # sequence variant text
+            # sequence variant text with shadow
             if not remove_site_text:
-                ax.text(position, y_pos*y_inc, var, size=9, ha="center", va="center")
+                # Add shadow
+                ax.text(position+0.02*spacing, (y_pos*y_inc)-0.02*y_inc, var, size=10, ha="center", va="center", fontweight='bold', color='black', alpha=0.3)
+                # Main text
+                ax.text(position, y_pos*y_inc, var, size=10, ha="center", va="center", fontweight='bold', color='white')
 
-        # reference variant text
+        # reference variant text with shadow
         if not remove_site_text:
-            ax.text(position, y_inc * -0.2, ref, size=9, ha="center", va="center")
+            # Add shadow
+            ax.text(position+0.02*spacing, (y_inc * -0.2)-0.02*y_inc, ref, size=10, ha="center", va="center", fontweight='medium', color='black', alpha=0.2)
+            # Main text
+            ax.text(position, y_inc * -0.2, ref, size=10, ha="center", va="center", fontweight='medium')
 
         #polygon showing mapping from genome to spaced out snps
         x = [snp-0.5,snp+0.5,right_of_box,left_of_box,snp-0.5]
-
         y = [bottom_polygon,bottom_polygon,top_polygon,top_polygon,bottom_polygon]
         coords = list(zip(x, y))
 
-        # draw polygon
-        poly = patches.Polygon(coords, alpha=0.2, fill=True, edgecolor='none',facecolor="dimgrey")
+        # draw polygon with gradient effect
+        poly = patches.Polygon(coords, alpha=0.08, fill=True, edgecolor='#CCCCCC',linewidth=0.5,facecolor="#4A5568", antialiased=True)
         ax.add_patch(poly)
 
-        rect = patches.Rectangle((left_of_box,top_polygon), spacing*0.8, y_inc,alpha=0.1, fill=True, edgecolor='none',facecolor="dimgrey")
+        rect = patches.Rectangle((left_of_box,top_polygon), spacing*0.85, y_inc*0.95,alpha=0.12, fill=True, edgecolor='#E0E0E0',linewidth=0.5,facecolor="#718096", antialiased=True)
         ax.add_patch(rect)
 
     if len(snp_dict) == 0:
@@ -624,43 +643,57 @@ def make_graph(num_seqs, num_snps, amb_dict, snp_records,
         bottom_polygon = y_inc * -1.7
 
 
-    # reference variant rectangle
-    rect = patches.Rectangle((0,(top_polygon)), length, y_inc ,alpha=0.2, fill=True, edgecolor='none',facecolor="dimgrey")
+    # reference variant rectangle with enhanced style
+    rect = patches.Rectangle((0,(top_polygon)), length, y_inc ,alpha=0.2, fill=True, edgecolor='#CBD5E0',linewidth=1,facecolor="#64748B", antialiased=True)
     ax.add_patch(rect)
 
-    ax.text(0,  y_inc * -0.2, label_map["reference"], size=9, ha="right", va="center")
+    # Add reference label with enhanced style
+    bbox_props = dict(boxstyle="round,pad=0.3", facecolor='#1F2937', edgecolor='none', alpha=0.9)
+    ax.text(-0.01*length,  y_inc * -0.2, label_map["reference"], size=12, ha="right", va="center", fontweight='bold', style='italic', color='white', bbox=bbox_props)
 
     ref_genome_position = y_inc*-2.7
 
-    # reference genome rectangle
-    rect = patches.Rectangle((0,ref_genome_position), length, y_inc ,alpha=0.2, fill=True, edgecolor='none',facecolor="dimgrey")
-    ax.add_patch(rect)
+    # reference genome rectangle with gradient-like effect
+    # Bottom darker layer
+    rect_bottom = patches.Rectangle((0,ref_genome_position), length, y_inc*0.5 ,alpha=0.25, fill=True, edgecolor='none',facecolor="#374151", antialiased=True)
+    ax.add_patch(rect_bottom)
+    # Top lighter layer
+    rect_top = patches.Rectangle((0,ref_genome_position+y_inc*0.5), length, y_inc*0.5 ,alpha=0.15, fill=True, edgecolor='none',facecolor="#6B7280", antialiased=True)
+    ax.add_patch(rect_top)
+    # Border
+    rect_border = patches.Rectangle((0,ref_genome_position), length, y_inc ,alpha=1, fill=False, edgecolor='#9CA3AF',linewidth=1, antialiased=True)
+    ax.add_patch(rect_border)
 
     for var in ref_vars:
-        ax.plot([var,var],[ref_genome_position,ref_genome_position+(y_inc*0.98)], color="#cbaca4")
+        ax.plot([var,var],[ref_genome_position+y_inc*0.02,ref_genome_position+(y_inc*0.98)], color="#DC2626", linewidth=2, alpha=0.7, antialiased=True, solid_capstyle='round')
 
 
-    ax.spines['top'].set_visible(False) ## make axes invisible
+    # Remove all plot borders/spines
+    ax.spines['top'].set_visible(False)
     ax.spines['right'].set_visible(False)
     ax.spines['left'].set_visible(False)
     ax.spines['bottom'].set_visible(False)
 
     plt.yticks([])
 
-    ax.set_xlim(0,length)
+    # Add extra space on the left for labels
+    ax.set_xlim(-0.05*length,length)
     if not flip_vertical:
         ax.set_ylim(ref_genome_position,y_level+(y_inc*1.05))
     else:
         ax.set_ylim(ref_genome_position,y_level+(y_inc*2.05))
         ax.invert_yaxis() # must be called after axis limits are set
 
-    ax.tick_params(axis='x', labelsize=8)
-    plt.xlabel("Position (base)", fontsize=9)
-    plt.tight_layout()
+    ax.tick_params(axis='x', labelsize=9)
+    plt.xlabel("Position (base)", fontsize=12, fontweight='medium')
+    # Adjust layout with more padding
+    plt.tight_layout(pad=1.5)
+    
+    # Save with high quality settings
     if not solid_background:
-        plt.savefig(output, transparent=True)
+        plt.savefig(output, transparent=True, bbox_inches='tight', pad_inches=0.2, edgecolor='none')
     else:
-        plt.savefig(output)
+        plt.savefig(output, bbox_inches='tight', pad_inches=0.2, facecolor='white', edgecolor='none')
 
 def get_colours(colour_palette):
 
@@ -669,6 +702,31 @@ def get_colours(colour_palette):
                                      "G":"skyblue","W":"#FFCC00","S":"#66FF00","M":"#6600FF",
                                      "K":"#66FFCC","R":"#FF00FF","Y":"#FFFF99","B":"#CCFF99",
                                      "D":"#FFFF00","H":"##33FF00","V":"#FF6699","N":"#333333"},
+                "nature": {"A":"#3572AF","C":"#E94B3C","T":"#F39C12","G":"#00A08A"},
+                "nature_extended": {"A":"#3572AF","C":"#E94B3C","T":"#F39C12","G":"#00A08A",
+                                    "W":"#FFC300","S":"#6FA8DC","M":"#8E44AD","K":"#1ABC9C",
+                                    "R":"#E74C3C","Y":"#F1C40F","B":"#3498DB","D":"#2ECC71",
+                                    "H":"#9B59B6","V":"#16A085","N":"#2C3E50"},
+                "morandi": {"A":"#A8A5A0","C":"#C4ADA0","T":"#B5B3A7","G":"#9A9B94"},
+                "morandi_extended": {"A":"#A8A5A0","C":"#C4ADA0","T":"#B5B3A7","G":"#9A9B94",
+                                    "W":"#D4C5B9","S":"#A7B0B3","M":"#B8A8A3","K":"#9FA5A3",
+                                    "R":"#BFB5B2","Y":"#C9C2B2","B":"#B0B5B8","D":"#AFAFA5",
+                                    "H":"#C0B5B0","V":"#A0A8A5","N":"#8B8680"},
+                "vangogh": {"A":"#1E3A8A","C":"#F59E0B","T":"#FDE047","G":"#10B981"},
+                "vangogh_extended": {"A":"#1E3A8A","C":"#F59E0B","T":"#FDE047","G":"#10B981",
+                                    "W":"#FBBF24","S":"#3B82F6","M":"#7C3AED","K":"#059669",
+                                    "R":"#DC2626","Y":"#FCD34D","B":"#2563EB","D":"#16A34A",
+                                    "H":"#9333EA","V":"#0D9488","N":"#1F2937"},
+                "monet": {"A":"#93C5FD","C":"#F9A8D4","T":"#BBF7D0","G":"#DDD6FE"},
+                "monet_extended": {"A":"#93C5FD","C":"#F9A8D4","T":"#BBF7D0","G":"#DDD6FE",
+                                  "W":"#FEF3C7","S":"#BFDBFE","M":"#E9D5FF","K":"#A7F3D0",
+                                  "R":"#FBCFE8","Y":"#FDE68A","B":"#DBEAFE","D":"#D1FAE5",
+                                  "H":"#EDE9FE","V":"#CCFBF1","N":"#E5E7EB"},
+                "matisse": {"A":"#EF4444","C":"#3B82F6","T":"#10B981","G":"#F59E0B"},
+                "matisse_extended": {"A":"#EF4444","C":"#3B82F6","T":"#10B981","G":"#F59E0B",
+                                    "W":"#F97316","S":"#6366F1","M":"#EC4899","K":"#14B8A6",
+                                    "R":"#DC2626","Y":"#FCD34D","B":"#2563EB","D":"#059669",
+                                    "H":"#DB2777","V":"#0891B2","N":"#6B7280"},
                 "wes": {"A":"#CC8B3C","C":"#456355","T":"#541F12","G":"#B62A3D"},
                 "primary": {"A":"green","C":"goldenrod","T":"steelblue","G":"indianred"},
                 "purine-pyrimidine":{"A":"indianred","C":"teal","T":"teal","G":"indianred"},
@@ -679,7 +737,27 @@ def get_colours(colour_palette):
                 "ugene":{"A":"#00ccff","R":"#d5c700","N":"#33ff00","D":"#ffff00","C":"#6600ff","Q":"#3399ff",
                          "E":"#c0bdbb","G":"#ff5082","H":"#fff233","I":"#00abed","L":"#008fc6","K":"#ffee00",
                          "M":"#1dc0ff","F":"#3df490","P":"#d5426c","S":"#ff83a7","T":"#ffd0dd","W":"#33cc78",
-                         "Y":"#65ffab","V":"#ff6699","X":"#999999","B":"#999999","Z":"#999999","J":"#999999"}
+                         "Y":"#65ffab","V":"#ff6699","X":"#999999","B":"#999999","Z":"#999999","J":"#999999"},
+                "nature_aa":{"A":"#3572AF","R":"#E94B3C","N":"#F39C12","D":"#00A08A","C":"#8B5CF6","Q":"#06B6D4",
+                            "E":"#059669","G":"#EA580C","H":"#7C3AED","I":"#0891B2","L":"#2563EB","K":"#DC2626",
+                            "M":"#7C2D12","F":"#84CC16","P":"#EC4899","S":"#F59E0B","T":"#10B981","W":"#4F46E5",
+                            "Y":"#BE123C","V":"#0EA5E9","X":"#6B7280","B":"#6B7280","Z":"#6B7280","J":"#6B7280"},
+                "morandi_aa":{"A":"#A8A5A0","R":"#C4ADA0","N":"#B5B3A7","D":"#9A9B94","C":"#B8A8A3","Q":"#A7B0B3",
+                             "E":"#9FA5A3","G":"#BFB5B2","H":"#C0B5B0","I":"#A0A8A5","L":"#B0B5B8","K":"#C9C2B2",
+                             "M":"#AFAFA5","F":"#D4C5B9","P":"#B5ABA5","S":"#C5BCB0","T":"#ABA8A0","W":"#A5A09B",
+                             "Y":"#BCB5A8","V":"#A8A8A0","X":"#8B8680","B":"#8B8680","Z":"#8B8680","J":"#8B8680"},
+                "vangogh_aa":{"A":"#1E3A8A","R":"#F59E0B","N":"#FDE047","D":"#10B981","C":"#7C3AED","Q":"#3B82F6",
+                             "E":"#059669","G":"#DC2626","H":"#9333EA","I":"#0891B2","L":"#2563EB","K":"#EF4444",
+                             "M":"#92400E","F":"#65A30D","P":"#DB2777","S":"#F97316","T":"#14B8A6","W":"#6366F1",
+                             "Y":"#BE123C","V":"#0EA5E9","X":"#374151","B":"#374151","Z":"#374151","J":"#374151"},
+                "monet_aa":{"A":"#93C5FD","R":"#F9A8D4","N":"#BBF7D0","D":"#DDD6FE","C":"#E9D5FF","Q":"#BFDBFE",
+                           "E":"#D1FAE5","G":"#FBCFE8","H":"#EDE9FE","I":"#CCFBF1","L":"#DBEAFE","K":"#FDE68A",
+                           "M":"#D5F4E6","F":"#FEF3C7","P":"#FCE7F3","S":"#FED7AA","T":"#A7F3D0","W":"#C7D2FE",
+                           "Y":"#FECDD3","V":"#CFFAFE","X":"#E5E7EB","B":"#E5E7EB","Z":"#E5E7EB","J":"#E5E7EB"},
+                "matisse_aa":{"A":"#EF4444","R":"#3B82F6","N":"#10B981","D":"#F59E0B","C":"#EC4899","Q":"#6366F1",
+                             "E":"#059669","G":"#DC2626","H":"#DB2777","I":"#0891B2","L":"#2563EB","K":"#F97316",
+                             "M":"#78350F","F":"#84CC16","P":"#BE185D","S":"#FB923C","T":"#14B8A6","W":"#7C3AED",
+                             "Y":"#991B1B","V":"#0284C7","X":"#6B7280","B":"#6B7280","Z":"#6B7280","J":"#6B7280"}
                 }
     if colour_palette not in palettes:
         sys.stderr.write(red(f"Error: please select one of {palettes} for --colour-palette option\n"))

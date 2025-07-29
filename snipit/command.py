@@ -50,8 +50,8 @@ def main(sysargs = sys.argv[1:]):
     f_group.add_argument("--size-option",action="store",help="Specify options for sizing. Options: expand, scale",dest="size_option",default="scale")
     f_group.add_argument("--solid-background",action="store_true",help="Force the plot to have a solid background, rather than a transparent one.",dest="solid_background")
     f_group.add_argument("-c","--colour-palette",dest="colour_palette",action="store",
-                         help="Specify colour palette. Options: [classic, classic_extended, primary, purine-pyrimidine, greyscale, wes, verity, ugene]. Use ugene for protein alignments.",default="classic",
-                         choices=["classic","classic_extended","primary","purine-pyrimidine","greyscale","wes","verity","ugene"],
+                         help="Specify colour palette. Options: [classic, classic_extended, nature, nature_extended, morandi, morandi_extended, vangogh, vangogh_extended, monet, monet_extended, matisse, matisse_extended, primary, purine-pyrimidine, greyscale, wes, verity, ugene, nature_aa, morandi_aa, vangogh_aa, monet_aa, matisse_aa]. Use _aa versions for protein alignments.",default="classic",
+                         choices=["classic","classic_extended","nature","nature_extended","morandi","morandi_extended","vangogh","vangogh_extended","monet","monet_extended","matisse","matisse_extended","primary","purine-pyrimidine","greyscale","wes","verity","ugene","nature_aa","morandi_aa","vangogh_aa","monet_aa","matisse_aa"],
                          metavar='')
     f_group.add_argument("--flip-vertical",action='store_true',help="Flip the orientation of the plot so sequences are below the reference rather than above it.",dest="flip_vertical")
     f_group.add_argument("--sort-by-mutation-number", action='store_true',
