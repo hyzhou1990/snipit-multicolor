@@ -21,6 +21,16 @@ Summarise SNPs relative to a reference sequence with beautiful, publication-read
 #### Van Gogh Style - Vibrant, expressive colors
 <img src="./docs/examples/vangogh_example.png" width="600">
 
+### GenBank Gene Annotations
+
+#### SARS-CoV-2 Genome with Multi-color Gene Tracks
+<img src="./docs/examples/sars_cov2_nature.png" width="800">
+*Each gene (ORF1ab, S, ORF3a, E, M, N) receives its own unique color that harmonizes with the selected palette*
+
+#### Different Palettes, Different Gene Colors
+<img src="./docs/examples/gene_palette_comparison.png" width="800">
+*The same genome displayed with Nature, Morandi, and Monet palettes - note how gene colors adapt to match each artistic style*
+
 ## What's New in snipit-multicolor
 
 This enhanced version includes:
@@ -28,7 +38,7 @@ This enhanced version includes:
 - **Enhanced visualization quality** with higher DPI, text shadows, and improved typography
 - **Cleaner aesthetics** with removed outer borders and subtle label backgrounds
 - **Better readability** with optimized font sizes and visual hierarchy
-- **GenBank gene annotations** support for displaying beautiful gene tracks with directional arrows
+- **GenBank gene annotations** with multi-color gene tracks showing individual genes in harmonized colors
 
 ## Installation
 
@@ -180,15 +190,20 @@ snipit alignment.fasta \
   --sort-by-mutation-number \
   --width 15 \
   --output-file comprehensive_analysis
+
+# Real example with SARS-CoV-2
+snipit covid_sequences.fasta \
+  --genbank NC_045512.gb \
+  --colour-palette monet \
+  --output-file covid_with_genes
 ```
 
-Gene features are automatically colored by type:
-- **CDS**: Blue arrows
-- **Gene**: Light blue arrows
-- **rRNA**: Green arrows
-- **tRNA**: Purple arrows
-- **ncRNA**: Orange arrows
-- **Regulatory**: Red arrows
+Each gene is automatically assigned a unique color that harmonizes with your chosen palette:
+- **Nature palette**: High-saturation scientific colors
+- **Morandi palette**: Muted, sophisticated tones  
+- **Van Gogh palette**: Vibrant, contrasting colors
+- **Monet palette**: Soft impressionist pastels
+- **Matisse palette**: Bold, pure colors
 
 Arrows indicate gene direction (forward/reverse strand) and gene names are displayed when space permits.
 
@@ -235,6 +250,20 @@ snipit alignment.fasta \
   --ambig-mode all \
   --flip-vertical \
   --output-file custom_analysis
+```
+
+### Example 4: SARS-CoV-2 with Gene Annotations
+```bash
+# Download SARS-CoV-2 reference GenBank file
+curl -o NC_045512.gb "https://www.ncbi.nlm.nih.gov/sviewer/viewer.fcgi?id=NC_045512.2&db=nuccore&report=genbank&conwithfeat=on&hide-cdd=on&retmode=text"
+
+# Create visualization with gene annotations
+snipit covid_alignment.fasta \
+  --genbank NC_045512.gb \
+  --colour-palette nature \
+  --sort-by-mutation-number \
+  --width 14 \
+  --output-file covid_mutations_with_genes
 ```
 
 ## Full Usage
