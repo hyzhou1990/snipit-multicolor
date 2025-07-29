@@ -48,7 +48,7 @@ This enhanced version includes:
 ## Installation
 
 ```
-pip install snipit
+pip install snipit-mc
 ```
 
 Or install directly from this repository:
