@@ -3,36 +3,36 @@ Enhanced version of snipit with artistic color palettes and improved visualizati
 
 Summarise SNPs relative to a reference sequence with beautiful, publication-ready visualizations
 
-<img src="./docs/genome_graph.png" width="700">
+<img src="https://raw.githubusercontent.com/hyzhou1990/snipit-multicolor/master/docs/genome_graph.png" width="700">
 
 ## Gallery
 
 ### Color Palette Comparison
-<img src="./docs/examples/palette_comparison.png" width="800">
+<img src="https://raw.githubusercontent.com/hyzhou1990/snipit-multicolor/master/docs/examples/palette_comparison.png" width="800">
 
 ### Example Outputs
 
 #### Nature Style - High-saturation colors for publications
-<img src="./docs/examples/nature_example.png" width="600">
+<img src="https://raw.githubusercontent.com/hyzhou1990/snipit-multicolor/master/docs/examples/nature_example.png" width="600">
 
 #### Morandi Style - Muted, sophisticated tones
-<img src="./docs/examples/morandi_example.png" width="600">
+<img src="https://raw.githubusercontent.com/hyzhou1990/snipit-multicolor/master/docs/examples/morandi_example.png" width="600">
 
 #### Van Gogh Style - Vibrant, expressive colors
-<img src="./docs/examples/vangogh_example.png" width="600">
+<img src="https://raw.githubusercontent.com/hyzhou1990/snipit-multicolor/master/docs/examples/vangogh_example.png" width="600">
 
 ### GenBank Gene Annotations
 
 #### SARS-CoV-2 Genome with Multi-color Gene Tracks
 
 **Nature Palette** - High-saturation scientific colors
-<img src="./docs/examples/sars_cov2_nature.png" width="700">
+<img src="https://raw.githubusercontent.com/hyzhou1990/snipit-multicolor/master/docs/examples/sars_cov2_nature.png" width="700">
 
 **Morandi Palette** - Muted, sophisticated tones
-<img src="./docs/examples/sars_cov2_morandi.png" width="700">
+<img src="https://raw.githubusercontent.com/hyzhou1990/snipit-multicolor/master/docs/examples/sars_cov2_morandi.png" width="700">
 
 **Monet Palette** - Soft impressionist pastels
-<img src="./docs/examples/sars_cov2_monet.png" width="700">
+<img src="https://raw.githubusercontent.com/hyzhou1990/snipit-multicolor/master/docs/examples/sars_cov2_monet.png" width="700">
 
 *Each gene (ORF1ab, S, ORF3a, E, M, N) receives its own unique color that harmonizes with the selected palette*
 
