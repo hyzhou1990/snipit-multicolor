@@ -20,7 +20,7 @@ from Bio.Seq import Seq
 import matplotlib as mpl
 from matplotlib import pyplot as plt
 import matplotlib.patches as patches
-from matplotlib.patches import Polygon
+from matplotlib.patches import Polygon, FancyBboxPatch
 
 
 new_rc_params = {'text.usetex': False,
@@ -44,6 +44,32 @@ NT_BASES = ["A","T","G","C"]
 NT_AMBIG = ["W","S","M","K","R","Y","B","D","H","V","N"]
 AA_BASES = ["A","R","N","D","C","Q","E","G","H","I","L","K","M","F","P","S","T","W","Y","V"]
 AA_AMBIG = ["X","B","Z","J"]
+
+
+def create_rounded_rectangle(xy, width, height, corner_radius=0.1, **kwargs):
+    """
+    Create a rounded rectangle using FancyBboxPatch.
+    
+    Args:
+        xy: (x, y) tuple for bottom-left corner position
+        width: Width of the rectangle
+        height: Height of the rectangle  
+        corner_radius: Radius for rounded corners (default: 0.1)
+        **kwargs: Additional arguments passed to FancyBboxPatch
+    
+    Returns:
+        FancyBboxPatch: Rounded rectangle patch
+    """
+    # Calculate relative corner radius based on rectangle size
+    relative_radius = min(corner_radius, min(width, height) * 0.25)
+    
+    boxstyle = f"round,pad=0,rounding_size={relative_radius}"
+    
+    return FancyBboxPatch(
+        xy, width, height,
+        boxstyle=boxstyle,
+        **kwargs
+    )
 
 
 def bp_range(s):
@@ -443,10 +469,10 @@ def draw_gene_track(ax, features, y_position, y_height, genome_length, colour_pa
     
     color_list = gene_color_schemes[base_palette]
     
-    # Draw background track
-    track_bg = patches.Rectangle((0, y_position), genome_length, y_height * 2,
-                                alpha=0.1, fill=True, edgecolor='none', 
-                                facecolor="#E5E7EB", antialiased=True)
+    # Draw background track with rounded corners
+    track_bg = create_rounded_rectangle((0, y_position), genome_length, y_height * 2,
+                                       corner_radius=0.04, alpha=0.1, fill=True, 
+                                       edgecolor='none', facecolor="#E5E7EB", antialiased=True)
     ax.add_patch(track_bg)
     
     # Create a mapping of unique gene names to colors
@@ -485,11 +511,11 @@ def draw_gene_track(ax, features, y_position, y_height, genome_length, colour_pa
             # Draw arrow pointing right
             arrow_size = min(feat_length * 0.1, genome_length * 0.01)
             
-            # Main rectangle (body of gene)
+            # Main rounded rectangle (body of gene)
             rect_width = feat_length - arrow_size
-            rect = patches.Rectangle((start, feat_y), rect_width, feat_height,
-                                   alpha=0.8, fill=True, edgecolor='white',
-                                   linewidth=1, facecolor=color, antialiased=True)
+            rect = create_rounded_rectangle((start, feat_y), rect_width, feat_height,
+                                          corner_radius=0.1, alpha=0.8, fill=True, 
+                                          edgecolor='white', linewidth=1, facecolor=color, antialiased=True)
             ax.add_patch(rect)
             
             # Arrow head
@@ -507,11 +533,11 @@ def draw_gene_track(ax, features, y_position, y_height, genome_length, colour_pa
             # Draw arrow pointing left
             arrow_size = min(feat_length * 0.1, genome_length * 0.01)
             
-            # Main rectangle (body of gene)
+            # Main rounded rectangle (body of gene)
             rect_width = feat_length - arrow_size
-            rect = patches.Rectangle((start + arrow_size, feat_y), rect_width, feat_height,
-                                   alpha=0.8, fill=True, edgecolor='white',
-                                   linewidth=1, facecolor=color, antialiased=True)
+            rect = create_rounded_rectangle((start + arrow_size, feat_y), rect_width, feat_height,
+                                          corner_radius=0.1, alpha=0.8, fill=True, 
+                                          edgecolor='white', linewidth=1, facecolor=color, antialiased=True)
             ax.add_patch(rect)
             
             # Arrow head
@@ -728,8 +754,10 @@ def make_graph(num_seqs, num_snps, amb_dict, snp_records,
         # either grey or white
         col = next_colour()
 
-        # for each record (sequence) draw a rectangle the length of the whole genome (either grey or white)
-        rect = patches.Rectangle((0,y_level-(0.5*y_inc)), length, y_inc ,alpha=0.25, fill=True, edgecolor='none',facecolor=col, antialiased=True)
+        # for each record (sequence) draw a rounded rectangle the length of the whole genome (either grey or white)
+        rect = create_rounded_rectangle((0,y_level-(0.5*y_inc)), length, y_inc,
+                                       corner_radius=0.05, alpha=0.25, fill=True, 
+                                       edgecolor='none', facecolor=col, antialiased=True)
         ax.add_patch(rect)
 
         # for each record add the name to the left hand side with background
@@ -759,13 +787,19 @@ def make_graph(num_seqs, num_snps, amb_dict, snp_records,
 
             name,ref,var,y_pos,recombi_out = sequence
             bottom_of_box = (y_pos*y_inc)-(0.5*y_inc)
-            # draw box for snp
+            # draw rounded box for snp
             if recombi_out:
-                rect = patches.Rectangle((left_of_box,bottom_of_box),spacing*0.85,  y_inc*0.9,alpha=0.8, fill=True, edgecolor='white',linewidth=0.5,facecolor=colour_dict[recombi_out], antialiased=True)
+                rect = create_rounded_rectangle((left_of_box,bottom_of_box),spacing*0.85,  y_inc*0.9,
+                                              corner_radius=0.15, alpha=0.8, fill=True, 
+                                              edgecolor='white',linewidth=0.5,facecolor=colour_dict[recombi_out], antialiased=True)
             elif var in colour_dict:
-                rect = patches.Rectangle((left_of_box,bottom_of_box),spacing*0.85,  y_inc*0.9,alpha=0.8, fill=True, edgecolor='white',linewidth=0.5,facecolor=colour_dict[var.upper()], antialiased=True)
+                rect = create_rounded_rectangle((left_of_box,bottom_of_box),spacing*0.85,  y_inc*0.9,
+                                              corner_radius=0.15, alpha=0.8, fill=True, 
+                                              edgecolor='white',linewidth=0.5,facecolor=colour_dict[var.upper()], antialiased=True)
             else:
-                rect = patches.Rectangle((left_of_box,bottom_of_box), spacing*0.85,  y_inc*0.9,alpha=0.8, fill=True, edgecolor='white',linewidth=0.5,facecolor="dimgrey", antialiased=True)
+                rect = create_rounded_rectangle((left_of_box,bottom_of_box), spacing*0.85,  y_inc*0.9,
+                                              corner_radius=0.15, alpha=0.8, fill=True, 
+                                              edgecolor='white',linewidth=0.5,facecolor="dimgrey", antialiased=True)
 
             ax.add_patch(rect)
 
@@ -792,7 +826,9 @@ def make_graph(num_seqs, num_snps, amb_dict, snp_records,
         poly = patches.Polygon(coords, alpha=0.08, fill=True, edgecolor='#CCCCCC',linewidth=0.5,facecolor="#4A5568", antialiased=True)
         ax.add_patch(poly)
 
-        rect = patches.Rectangle((left_of_box,top_polygon), spacing*0.85, y_inc*0.95,alpha=0.12, fill=True, edgecolor='#E0E0E0',linewidth=0.5,facecolor="#718096", antialiased=True)
+        rect = create_rounded_rectangle((left_of_box,top_polygon), spacing*0.85, y_inc*0.95,
+                                       corner_radius=0.12, alpha=0.12, fill=True, 
+                                       edgecolor='#E0E0E0',linewidth=0.5,facecolor="#718096", antialiased=True)
         ax.add_patch(rect)
 
     if len(snp_dict) == 0:
@@ -804,8 +840,10 @@ def make_graph(num_seqs, num_snps, amb_dict, snp_records,
         bottom_polygon = y_inc * -1.7
 
 
-    # reference variant rectangle with enhanced style
-    rect = patches.Rectangle((0,(top_polygon)), length, y_inc ,alpha=0.2, fill=True, edgecolor='#CBD5E0',linewidth=1,facecolor="#64748B", antialiased=True)
+    # reference variant rounded rectangle with enhanced style
+    rect = create_rounded_rectangle((0,(top_polygon)), length, y_inc,
+                                   corner_radius=0.08, alpha=0.2, fill=True, 
+                                   edgecolor='#CBD5E0',linewidth=1,facecolor="#64748B", antialiased=True)
     ax.add_patch(rect)
 
     # Add reference label with enhanced style
@@ -814,15 +852,21 @@ def make_graph(num_seqs, num_snps, amb_dict, snp_records,
 
     ref_genome_position = y_inc*-2.7
 
-    # reference genome rectangle with gradient-like effect
+    # reference genome rounded rectangle with gradient-like effect
     # Bottom darker layer
-    rect_bottom = patches.Rectangle((0,ref_genome_position), length, y_inc*0.5 ,alpha=0.25, fill=True, edgecolor='none',facecolor="#374151", antialiased=True)
+    rect_bottom = create_rounded_rectangle((0,ref_genome_position), length, y_inc*0.5,
+                                          corner_radius=0.06, alpha=0.25, fill=True, 
+                                          edgecolor='none',facecolor="#374151", antialiased=True)
     ax.add_patch(rect_bottom)
     # Top lighter layer
-    rect_top = patches.Rectangle((0,ref_genome_position+y_inc*0.5), length, y_inc*0.5 ,alpha=0.15, fill=True, edgecolor='none',facecolor="#6B7280", antialiased=True)
+    rect_top = create_rounded_rectangle((0,ref_genome_position+y_inc*0.5), length, y_inc*0.5,
+                                       corner_radius=0.06, alpha=0.15, fill=True, 
+                                       edgecolor='none',facecolor="#6B7280", antialiased=True)
     ax.add_patch(rect_top)
     # Border
-    rect_border = patches.Rectangle((0,ref_genome_position), length, y_inc ,alpha=1, fill=False, edgecolor='#9CA3AF',linewidth=1, antialiased=True)
+    rect_border = create_rounded_rectangle((0,ref_genome_position), length, y_inc,
+                                          corner_radius=0.06, alpha=1, fill=False, 
+                                          edgecolor='#9CA3AF',linewidth=1, antialiased=True)
     ax.add_patch(rect_border)
 
     for var in ref_vars:
