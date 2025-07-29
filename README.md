@@ -5,6 +5,22 @@ Summarise SNPs relative to a reference sequence with beautiful, publication-read
 
 <img src="./docs/genome_graph.png" width="700">
 
+## Gallery
+
+### Color Palette Comparison
+<img src="./docs/examples/palette_comparison.png" width="800">
+
+### Example Outputs
+
+#### Nature Style - High-saturation colors for publications
+<img src="./docs/examples/nature_example.png" width="600">
+
+#### Morandi Style - Muted, sophisticated tones
+<img src="./docs/examples/morandi_example.png" width="600">
+
+#### Van Gogh Style - Vibrant, expressive colors
+<img src="./docs/examples/vangogh_example.png" width="600">
+
 ## What's New in snipit-multicolor
 
 This enhanced version includes:
