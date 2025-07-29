@@ -24,12 +24,17 @@ Summarise SNPs relative to a reference sequence with beautiful, publication-read
 ### GenBank Gene Annotations
 
 #### SARS-CoV-2 Genome with Multi-color Gene Tracks
-<img src="./docs/examples/sars_cov2_nature.png" width="800">
-*Each gene (ORF1ab, S, ORF3a, E, M, N) receives its own unique color that harmonizes with the selected palette*
 
-#### Different Palettes, Different Gene Colors
-<img src="./docs/examples/gene_palette_comparison.png" width="800">
-*The same genome displayed with Nature, Morandi, and Monet palettes - note how gene colors adapt to match each artistic style*
+**Nature Palette** - High-saturation scientific colors
+<img src="./docs/examples/sars_cov2_nature.png" width="700">
+
+**Morandi Palette** - Muted, sophisticated tones
+<img src="./docs/examples/sars_cov2_morandi.png" width="700">
+
+**Monet Palette** - Soft impressionist pastels
+<img src="./docs/examples/sars_cov2_monet.png" width="700">
+
+*Each gene (ORF1ab, S, ORF3a, E, M, N) receives its own unique color that harmonizes with the selected palette*
 
 ## What's New in snipit-multicolor
 
