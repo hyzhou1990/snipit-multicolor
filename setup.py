@@ -6,7 +6,7 @@ import pkg_resources
 
 from snipit import __version__, _program
 
-setup(name='snipit',
+setup(name='snipit-mc',
       version=__version__,
       packages=find_packages(),
       scripts=["snipit/scripts/snp_functions.py"],
