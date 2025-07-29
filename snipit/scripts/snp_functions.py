@@ -774,7 +774,7 @@ def make_graph(num_seqs, num_snps, amb_dict, snp_records,
         if not remove_site_text:
             # Add background for position number
             bbox_props = dict(boxstyle="round,pad=0.2", facecolor='white', edgecolor='#E5E7EB', linewidth=0.5, alpha=0.9)
-            ax.text(position, y_level+(0.55*y_inc), snp, size=9, ha="center", va="bottom" if not flip_vertical else "top", rotation=90, fontweight='medium', color='#374151', bbox=bbox_props)
+            ax.text(position, y_level+(0.55*y_inc), snp, size=11, ha="center", va="bottom" if not flip_vertical else "top", rotation=45, fontweight='medium', color='#374151')
 
         # snp position labels
         left_of_box = position-(0.4*spacing)
@@ -806,16 +806,16 @@ def make_graph(num_seqs, num_snps, amb_dict, snp_records,
             # sequence variant text with shadow
             if not remove_site_text:
                 # Add shadow
-                ax.text(position+0.02*spacing, (y_pos*y_inc)-0.02*y_inc, var, size=10, ha="center", va="center", fontweight='bold', color='black', alpha=0.3)
+                ax.text(position+0.02*spacing, (y_pos*y_inc)-0.02*y_inc, var, size=11, ha="center", va="center", fontweight='bold', color='black', alpha=0.3)
                 # Main text
-                ax.text(position, y_pos*y_inc, var, size=10, ha="center", va="center", fontweight='bold', color='white')
+                ax.text(position, y_pos*y_inc, var, size=11, ha="center", va="center", fontweight='bold', color='white')
 
         # reference variant text with shadow
         if not remove_site_text:
             # Add shadow
-            ax.text(position+0.02*spacing, (y_inc * -0.2)-0.02*y_inc, ref, size=10, ha="center", va="center", fontweight='medium', color='black', alpha=0.2)
+            ax.text(position+0.02*spacing, (y_inc * -0.2)-0.02*y_inc, ref, size=11, ha="center", va="center", fontweight='medium', color='black', alpha=0.2)
             # Main text
-            ax.text(position, y_inc * -0.2, ref, size=10, ha="center", va="center", fontweight='medium')
+            ax.text(position, y_inc * -0.2, ref, size=11, ha="center", va="center", fontweight='medium')
 
         #polygon showing mapping from genome to spaced out snps
         x = [snp-0.5,snp+0.5,right_of_box,left_of_box,snp-0.5]
